@@ -1,0 +1,7 @@
+﻿src_id,dest_id,max_speed,length,oneway,lanes
+1,2,60,100,False,2
+2,3,60,100,False,2
+3,4,60,100,False,2
+4,1,60,100,False,2
+1,5,60,70,False,1
+5,3,60,80,False,1

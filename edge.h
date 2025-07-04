@@ -125,22 +125,36 @@ struct Edge {
                 break;
             }
 
-            std::size_t src_id = static_cast<size_t>(std::stoll(src));
-            std::size_t dest_id = static_cast<size_t>(std::stoll(dest));
+            // Validar que no haya campos vacíos
+            if (strlen(src) == 0 || strlen(dest) == 0 || strlen(max_speed) == 0 || strlen(length) == 0 || strlen(oneway) == 0 || strlen(lanes) == 0) {
+                delete[] src;
+                delete[] dest;
+                delete[] max_speed;
+                delete[] length;
+                delete[] oneway;
+                delete[] lanes;
+                continue;
+            }
 
-            Node *src_node = nodes[src_id];
-            Node *dest_node = nodes[dest_id];
+            try {
+                std::size_t src_id = static_cast<size_t>(std::stoll(src));
+                std::size_t dest_id = static_cast<size_t>(std::stoll(dest));
 
-            Edge *edge = new Edge(
-                    src_node,
-                    dest_node,
-                    std::stoi(max_speed),
-                    std::stod(length),
-                    std::strcmp(oneway, "True") == 0,
-                    std::stoi(lanes)
-            );
-            edges.push_back(edge);
+                Node *src_node = nodes[src_id];
+                Node *dest_node = nodes[dest_id];
 
+                Edge *edge = new Edge(
+                        src_node,
+                        dest_node,
+                        std::stoi(max_speed),
+                        std::stod(length),
+                        std::strcmp(oneway, "True") == 0,
+                        std::stoi(lanes)
+                );
+                edges.push_back(edge);
+            } catch (...) {
+                // Si hay error de conversión, ignorar la línea
+            }
             delete[] src;
             delete[] dest;
             delete[] oneway;

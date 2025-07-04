@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include <cstring>
 
 // Color por defecto de un vertice (usado por SFML)
 sf::Color default_node_color = sf::Color(150, 40, 50);
@@ -67,11 +68,22 @@ struct Node {
                 break;
             }
 
-            std::size_t identifier = static_cast<size_t>(std::stoll(id));
-            nodes.insert({
-                                 identifier,
-                                 new Node(identifier, std::stof(y), std::stof(x))});
+            // Validar que no haya campos vacíos
+            if (strlen(id) == 0 || strlen(y) == 0 || strlen(x) == 0) {
+                delete[] id;
+                delete[] y;
+                delete[] x;
+                continue;
+            }
 
+            try {
+                std::size_t identifier = static_cast<size_t>(std::stoll(id));
+                nodes.insert({
+                    identifier,
+                    new Node(identifier, std::stof(y), std::stof(x))});
+            } catch (...) {
+                // Si hay error de conversión, ignorar la línea
+            }
             delete[] id;
             delete[] y;
             delete[] x;
